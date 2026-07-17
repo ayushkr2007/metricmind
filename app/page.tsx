@@ -44,7 +44,6 @@ export default function Home() {
     scrollToBottom();
   }, [messages]);
 
-  // Download CSV function
   const downloadCSV = (data: any[]) => {
     if (!data || data.length === 0) return;
 
@@ -285,8 +284,8 @@ export default function Home() {
             <div className={`max-w-[85%] ${msg.role === "user" ? "order-2" : "order-1"}`}>
               <div
                 className={`rounded-2xl px-4 py-3 text-sm leading-relaxed ${msg.role === "user"
-                  ? "bg-blue-600 text-white"
-                  : "bg-neutral-800 text-neutral-100"
+                    ? "bg-blue-600 text-white"
+                    : "bg-neutral-800 text-neutral-100"
                   }`}
               >
                 <div className="whitespace-pre-wrap">{msg.content}</div>
@@ -375,6 +374,11 @@ export default function Home() {
 
         <div ref={messagesEndRef} />
       </main>
+
+      {/* Footer with name */}
+      <div className="text-center text-xs text-neutral-500 py-2 border-t border-neutral-800">
+        Built by Ayush Gautam &bull; Powered by Groq, Cube, Snowflake
+      </div>
 
       {/* Input bar */}
       <footer className="border-t border-neutral-800 px-6 py-4">
