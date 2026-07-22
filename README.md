@@ -1,36 +1,31 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# MetricMind — Agentic Semantic BI Engine
 
-## Getting Started
+MetricMind is an AI-powered business intelligence agent that lets you query your sales data using natural language. It combines a semantic layer (Cube.dev), a modern data stack (Snowflake + dbt), and a large language model (Groq) to deliver instant, governed insights.
 
-First, run the development server:
+## ✨ Features
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- 🤖 **AI-Powered Chat**: Ask questions in plain English like *"Show me sales by category"*
+- 📊 **Dynamic Visualizations**: Bar charts, line charts, and KPI cards using Recharts
+- 📥 **Export Data**: Download any query result as CSV
+- 🔍 **Transparency**: See the SQL and reasoning behind every answer
+- 💡 **Smart Suggestions**: Follow-up questions to guide your analysis
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 🧠 Tech Stack
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- **Frontend**: Next.js 16, React, Tailwind CSS, Recharts
+- **AI Agent**: LangChain + Groq (Llama 3.1)
+- **Semantic Layer**: Cube.dev
+- **Data Warehouse**: Snowflake
+- **Data Transformation**: dbt
+- **Deployment**: Vercel
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 🚀 Live Demo
 
-## Learn More
+Try MetricMind live: [https://metricmind-ui.vercel.app](https://metricmind-ui.vercel.app)
 
-To learn more about Next.js, take a look at the following resources:
+## 📦 Setup Instructions
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/ayushkr2007/metricmind.git
+   cd metricmind
