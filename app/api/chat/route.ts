@@ -53,7 +53,12 @@ function getSuggestions(question: string): string[] {
     const q = question.toLowerCase();
 
     if (q.includes("category")) {
-        return ["Show me sales by region", "What's our profit margin?", "Show me sales trend over time"];
+        return [
+            "Show me sales by region",
+            "What's our profit margin?",
+            "Show me sales trend over time",
+            "Which category has the highest sales?", // ← NEW SUGGESTION ADDED
+        ];
     } else if (q.includes("region")) {
         return ["Show me sales by category", "Which region is most profitable?", "Compare regions"];
     } else if (q.includes("trend") || q.includes("time") || q.includes("month")) {
