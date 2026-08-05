@@ -582,7 +582,7 @@ export default function Home() {
   );
 
   // ============================================
-  // PROFILE VIEW (FIXED)
+  // PROFILE VIEW (FIXED & PRIVACY SAFE)
   // ============================================
 
   const renderProfile = () => (
@@ -609,7 +609,8 @@ export default function Home() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">Email Address</label>
-            <input type="email" defaultValue="ayushkr2007@gmail.com" className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white outline-none focus:border-purple-500" />
+            {/* Email changed to a generic group placeholder for privacy */}
+            <input type="email" defaultValue="team@metricmind.app" className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white outline-none focus:border-purple-500" />
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">Role</label>
