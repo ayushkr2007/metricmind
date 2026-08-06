@@ -321,13 +321,11 @@ export default function Home() {
 
     return (
       <div className="space-y-6">
-        {/* Page Title */}
         <div>
           <h2 className="text-2xl font-bold text-white">MetricMind Dashboard</h2>
           <p className="text-gray-400 text-sm">AI Powered Business Analytics</p>
         </div>
 
-        {/* Analytics Section */}
         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
           <h3 className="text-sm font-medium text-gray-300 mb-2">📈 Analytics</h3>
           <p className="text-xs text-gray-400">Analyze your uploaded dataset and discover valuable insights.</p>
@@ -336,7 +334,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* KPI Cards */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
             <div className="text-xs text-gray-400 uppercase tracking-wide">Total Sales</div>
@@ -356,7 +353,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Charts */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
             <h3 className="text-sm font-medium text-gray-300 mb-2">Sales by Category</h3>
@@ -403,7 +399,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Sales Trend */}
         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
           <h3 className="text-sm font-medium text-gray-300 mb-2">Sales Trend (Monthly)</h3>
           <div className="h-64">
@@ -426,7 +421,6 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Footer */}
         <div className="text-center text-xs text-gray-500 py-2 border-t border-white/10">
           MetricMind • Version 1.0.0
         </div>
@@ -534,7 +528,7 @@ export default function Home() {
   };
 
   // ============================================
-  // REPORTS VIEW (FIXED)
+  // REPORTS VIEW
   // ============================================
 
   const renderReports = () => (
@@ -582,7 +576,7 @@ export default function Home() {
   );
 
   // ============================================
-  // PROFILE VIEW (FIXED & PRIVACY SAFE)
+  // PROFILE VIEW
   // ============================================
 
   const renderProfile = () => (
@@ -609,7 +603,6 @@ export default function Home() {
           </div>
           <div>
             <label className="block text-sm font-medium text-gray-300 mb-1">Email Address</label>
-            {/* Email changed to a generic group placeholder for privacy */}
             <input type="email" defaultValue="team@metricmind.app" className="w-full bg-black/40 border border-white/10 rounded-lg p-3 text-white outline-none focus:border-purple-500" />
           </div>
           <div>
@@ -631,7 +624,7 @@ export default function Home() {
   );
 
   // ============================================
-  // SETTINGS VIEW (FIXED)
+  // SETTINGS VIEW
   // ============================================
 
   const renderSettings = () => (
@@ -687,13 +680,11 @@ export default function Home() {
     <div className="flex h-screen bg-gradient-to-br from-slate-900 via-purple-950/30 to-slate-900 text-neutral-100">
       {/* Sidebar */}
       <aside className="w-64 border-r border-white/10 bg-white/5 backdrop-blur-md flex flex-col">
-        {/* Logo */}
         <div className="p-6 border-b border-white/10">
           <h1 className="text-xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">🧠 MetricMind</h1>
           <p className="text-xs text-gray-400">AI Business Analytics</p>
         </div>
 
-        {/* Navigation */}
         <nav className="flex-1 p-4 space-y-1">
           {navItems.map((item) => (
             <button
@@ -710,14 +701,12 @@ export default function Home() {
           ))}
         </nav>
 
-        {/* Footer */}
         <div className="p-4 border-t border-white/10">
           <p className="text-xs text-gray-500">MetricMind</p>
           <p className="text-xs text-gray-500">Version 1.0.0</p>
         </div>
       </aside>
 
-      {/* Main Content */}
       <main className="flex-1 overflow-y-auto p-6">
         {activePage === "dashboard" && renderDashboard()}
         {activePage === "chat" && (
