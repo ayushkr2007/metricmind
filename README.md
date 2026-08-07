@@ -25,4 +25,4 @@
 - metricmind_global/ � Global pricing module
 
 ## ?? Author
-**Ruchith Nayak** � [@Ruchithnayak](https://github.com/Ruchithnayak)
+**AYUSH GAUTAM** � [@ayushkr2007](https://github.com/ayushkr2007/metricmind)
