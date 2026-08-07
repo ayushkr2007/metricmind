@@ -1,28 +1,39 @@
-# ?? MetricMind � Global Country-Specific Pricing BI
+# 🧠 MetricMind - AI-Powered Business Intelligence
 
-> A semantic BI engine that analyzes country-specific pricing across 24 countries with local currency support, GDP-per-capita context, and an interactive AI chat interface.
+**MetricMind** is a fully semantic AI BI engine that transforms natural language questions into real-time data visualizations. It analyzes sales and pricing data across 24 countries, supports local currencies, and provides multi-step reasoning for deep business insights.
 
-## ?? Features
-- **?? Country-Specific Pricing** � Prices adapt to each country's GDP per capita and purchasing power
-- **?? Local Currency Support** � Revenue shown in both USD and local currencies with real exchange rates
-- **?? Interactive Chat Interface** � Ask questions in natural language and get instant charts, tables, and KPIs
-- **?? Transparency Layer** � Every query exposes the underlying API call (measures, dimensions, filters)
-- **?? Multi-Step Reasoning** � The agent breaks down complex margin analysis into logical steps
-- **??? Semantic Governance** � All metrics defined in a semantic layer � no hardcoded values
+> **Live Demo**: [https://metricmind-ui.vercel.app](https://metricmind-ui.vercel.app)
 
-## ?? Quick Start
-1. Open metricmind_standalone.html in any browser
-2. The auto-demo starts automatically � watch it run or click Skip
-3. Try queries like: "Compare prices across all countries"
+---
 
-## ?? Data Coverage
-24 countries across 6 regions with 3 product categories (Electronics, Clothing, Home & Garden)
+## 🚀 Tech Stack
+- **Frontend**: Next.js (React), Tailwind CSS, Recharts
+- **Backend/API**: Next.js API Routes, Custom LLM Agent logic
+- **Infrastructure**: Vercel (Hosting & CI/CD), GitHub
+- **Data Handling**: JSON-based transactional datasets with semantic governance
 
-## ??? Architecture
-- ackend/ � API server and semantic engine
-- data/ � Transaction dataset
-- semantic_layer/ � Metric definitions and governance
-- metricmind_global/ � Global pricing module
+---
 
-## ?? Author
-**AYUSH GAUTAM** � [@ayushkr2007](https://github.com/ayushkr2007/metricmind)
+## ✨ Key Features
+- **Natural Language Querying**: Ask questions like *"Show me sales by region"* or *"What is our profit margin?"*.
+- **Interactive Dashboards**: Real-time charts (Bar, Line, Area) and KPI cards.
+- **Multi-Step Reasoning**: The AI breaks down complex queries into logical steps, showing you its thought process.
+- **Transparency Layer**: Every query exposes the underlying API call structure (measures, dimensions, filters).
+- **Semantic Governance**: All metrics (revenue, profit, costs) are defined in a semantic layer, eliminating hardcoded values.
+
+---
+
+## 🧩 Project Architecture & Pipeline
+1. **User Input** -> User types a question into the Chat interface.
+2. **API Call** -> The frontend sends the query to `/api/chat`.
+3. **AI Processing** -> The backend engine parses the intent, identifies required data dimensions, and retrieves the relevant dataset.
+4. **Reasoning & Analytics** -> The agent computes the necessary metrics (totals, margins, regional sums).
+5. **Visualization** -> Data is formatted and sent back to the frontend, which uses Recharts to render tables, single-value KPIs, and Bar/Line charts.
+
+---
+
+## 🛠️ How to Run Locally
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/ayushkr2007/metricmind.git
+   cd metricmind
