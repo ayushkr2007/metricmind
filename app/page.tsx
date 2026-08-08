@@ -24,7 +24,7 @@ type Message = {
   suggestions?: string[];
 };
 
-// Dashboard data
+// Static fallback data for charts (if API fails, or for chat responses)
 const DASHBOARD_DATA = {
   kpis: {
     total_sales: 750000,
@@ -313,11 +313,36 @@ export default function Home() {
   ];
 
   // ============================================
-  // DASHBOARD VIEW
+  // DASHBOARD VIEW (DYNAMIC)
   // ============================================
 
   const renderDashboard = () => {
-    const kpis = DASHBOARD_DATA.kpis;
+    const [loading, setLoading] = useState(true);
+    const [data, setData] = useState<any>(null);
+
+    useEffect(() => {
+      fetch('/api/dashboard')
+        .then(res => res.json())
+        .then(json => { setData(json); setLoading(false); })
+        .catch(() => setLoading(false));
+    }, []);
+
+    if (loading) {
+      return (
+        <div className="flex items-center justify-center h-64">
+          <div className="flex flex-col items-center gap-2 text-gray-400">
+            <div className="flex gap-1">
+              <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce"></span>
+              <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0.2s" }}></span>
+              <span className="w-2 h-2 bg-blue-500 rounded-full animate-bounce" style={{ animationDelay: "0.4s" }}></span>
+            </div>
+            <p className="text-sm">Connecting to data engine...</p>
+          </div>
+        </div>
+      );
+    }
+
+    if (!data) return <div className="text-red-400 p-4">Failed to load dashboard data.</div>;
 
     return (
       <div className="space-y-6">
@@ -325,104 +350,67 @@ export default function Home() {
           <h2 className="text-2xl font-bold text-white">MetricMind Dashboard</h2>
           <p className="text-gray-400 text-sm">AI Powered Business Analytics</p>
         </div>
-
-        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
-          <h3 className="text-sm font-medium text-gray-300 mb-2">📈 Analytics</h3>
-          <p className="text-xs text-gray-400">Analyze your uploaded dataset and discover valuable insights.</p>
-          <div className="mt-4 p-4 bg-white/5 rounded-lg text-center text-gray-400 text-sm">
-            Loading analytics...
-          </div>
-        </div>
-
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
             <div className="text-xs text-gray-400 uppercase tracking-wide">Total Sales</div>
-            <div className="text-2xl font-bold text-white">${kpis.total_sales.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-white">${data.kpis.total_sales.toLocaleString('en-US')}</div>
           </div>
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
             <div className="text-xs text-gray-400 uppercase tracking-wide">Total Profit</div>
-            <div className="text-2xl font-bold text-white">${kpis.total_profit.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-white">${data.kpis.total_profit.toLocaleString('en-US')}</div>
           </div>
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
             <div className="text-xs text-gray-400 uppercase tracking-wide">Total Orders</div>
-            <div className="text-2xl font-bold text-white">{kpis.total_orders.toLocaleString()}</div>
+            <div className="text-2xl font-bold text-white">{data.kpis.total_orders.toLocaleString('en-US')}</div>
           </div>
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
             <div className="text-xs text-gray-400 uppercase tracking-wide">Profit Margin</div>
-            <div className="text-2xl font-bold text-white">{kpis.avg_profit_margin}%</div>
+            <div className="text-2xl font-bold text-white">{data.kpis.avg_profit_margin}%</div>
           </div>
         </div>
-
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
             <h3 className="text-sm font-medium text-gray-300 mb-2">Sales by Category</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={DASHBOARD_DATA.sales_by_category}>
+                <BarChart data={data.sales_by_category}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
                   <XAxis dataKey="category" stroke="#94a3b8" fontSize={12} />
                   <YAxis stroke="#94a3b8" fontSize={12} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#1e293b",
-                      border: "1px solid #334155",
-                      borderRadius: "8px",
-                      color: "#e2e8f0",
-                    }}
-                  />
+                  <Tooltip contentStyle={{ backgroundColor: "#1e293b", borderRadius: "8px", color: "#e2e8f0" }} />
                   <Bar dataKey="sales" fill="#3b82f6" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
-
           <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
             <h3 className="text-sm font-medium text-gray-300 mb-2">Sales by Region</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={DASHBOARD_DATA.sales_by_region}>
+                <BarChart data={data.sales_by_region}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
                   <XAxis dataKey="region" stroke="#94a3b8" fontSize={12} />
                   <YAxis stroke="#94a3b8" fontSize={12} />
-                  <Tooltip
-                    contentStyle={{
-                      backgroundColor: "#1e293b",
-                      border: "1px solid #334155",
-                      borderRadius: "8px",
-                      color: "#e2e8f0",
-                    }}
-                  />
+                  <Tooltip contentStyle={{ backgroundColor: "#1e293b", borderRadius: "8px", color: "#e2e8f0" }} />
                   <Bar dataKey="sales" fill="#8b5cf6" radius={[4, 4, 0, 0]} />
                 </BarChart>
               </ResponsiveContainer>
             </div>
           </div>
         </div>
-
         <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-lg p-4">
           <h3 className="text-sm font-medium text-gray-300 mb-2">Sales Trend (Monthly)</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={DASHBOARD_DATA.sales_trend}>
+              <LineChart data={data.sales_trend}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
                 <XAxis dataKey="month" stroke="#94a3b8" fontSize={12} />
                 <YAxis stroke="#94a3b8" fontSize={12} />
-                <Tooltip
-                  contentStyle={{
-                    backgroundColor: "#1e293b",
-                    border: "1px solid #334155",
-                    borderRadius: "8px",
-                    color: "#e2e8f0",
-                  }}
-                />
+                <Tooltip contentStyle={{ backgroundColor: "#1e293b", borderRadius: "8px", color: "#e2e8f0" }} />
                 <Line type="monotone" dataKey="sales" stroke="#22c55e" strokeWidth={2} dot={{ fill: "#22c55e" }} />
               </LineChart>
             </ResponsiveContainer>
           </div>
-        </div>
-
-        <div className="text-center text-xs text-gray-500 py-2 border-t border-white/10">
-          MetricMind • Version 1.0.0
         </div>
       </div>
     );
@@ -554,52 +542,60 @@ export default function Home() {
   };
 
   // ============================================
-  // REPORTS VIEW
+  // REPORTS VIEW (DYNAMIC)
   // ============================================
 
-  const renderReports = () => (
-    <div className="flex flex-col w-full max-w-4xl text-white">
-      <div className="flex justify-between items-center mb-6">
-        <div>
-          <h2 className="text-2xl font-bold">Analytics Reports</h2>
-          <p className="text-gray-400 text-sm">Export and manage your analytics reports</p>
-        </div>
-        <button className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">
-          + Generate New Report
-        </button>
-      </div>
+  const renderReports = () => {
+    const [loading, setLoading] = useState(true);
+    const [reports, setReports] = useState<any[]>([]);
 
-      <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden">
-        <table className="w-full text-left">
-          <thead className="bg-white/10 border-b border-white/10">
-            <tr>
-              <th className="p-4 text-sm font-medium text-gray-400">Report Name</th>
-              <th className="p-4 text-sm font-medium text-gray-400">Type</th>
-              <th className="p-4 text-sm font-medium text-gray-400">Date Generated</th>
-              <th className="p-4 text-sm font-medium text-gray-400">Status</th>
-              <th className="p-4 text-sm font-medium text-gray-400">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="border-b border-white/5 hover:bg-white/5 transition-colors">
-              <td className="p-4 font-medium">Sales Overview Q3</td>
-              <td className="p-4 text-gray-400">Revenue</td>
-              <td className="p-4 text-gray-400">Aug 2, 2026</td>
-              <td className="p-4"><span className="bg-green-500/20 text-green-400 text-xs px-2 py-1 rounded-full border border-green-500/20">Ready</span></td>
-              <td className="p-4"><button className="text-blue-400 hover:text-blue-300">Download</button></td>
-            </tr>
-            <tr className="border-b border-white/5 hover:bg-white/5 transition-colors">
-              <td className="p-4 font-medium">Profit Margin Analysis</td>
-              <td className="p-4 text-gray-400">Profit</td>
-              <td className="p-4 text-gray-400">Jul 28, 2026</td>
-              <td className="p-4"><span className="bg-yellow-500/20 text-yellow-400 text-xs px-2 py-1 rounded-full border border-yellow-500/20">Processing</span></td>
-              <td className="p-4"><span className="text-gray-600">Pending</span></td>
-            </tr>
-          </tbody>
-        </table>
+    useEffect(() => {
+      fetch('/api/reports')
+        .then(res => res.json())
+        .then(json => { setReports(json); setLoading(false); })
+        .catch(() => setLoading(false));
+    }, []);
+
+    if (loading) return <div className="text-gray-400 p-6">Loading reports...</div>;
+
+    return (
+      <div className="flex flex-col w-full max-w-4xl text-white">
+        <div className="flex justify-between items-center mb-6">
+          <div>
+            <h2 className="text-2xl font-bold">Analytics Reports</h2>
+            <p className="text-gray-400 text-sm">Export and manage your analytics reports</p>
+          </div>
+          <button className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-2 rounded-lg font-medium hover:opacity-90 transition-opacity">
+            + Generate New Report
+          </button>
+        </div>
+        <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl overflow-hidden">
+          <table className="w-full text-left">
+            <thead className="bg-white/10 border-b border-white/10">
+              <tr><th className="p-4 text-sm font-medium text-gray-400">Report Name</th><th className="p-4 text-sm font-medium text-gray-400">Type</th><th className="p-4 text-sm font-medium text-gray-400">Date Generated</th><th className="p-4 text-sm font-medium text-gray-400">Status</th><th className="p-4 text-sm font-medium text-gray-400">Action</th></tr>
+            </thead>
+            <tbody>
+              {reports.map((rep) => (
+                <tr key={rep.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
+                  <td className="p-4 font-medium">{rep.name}</td>
+                  <td className="p-4 text-gray-400">{rep.type}</td>
+                  <td className="p-4 text-gray-400">{rep.date}</td>
+                  <td className="p-4">
+                    <span className={`text-xs px-2 py-1 rounded-full border ${rep.status === 'Ready' ? 'bg-green-500/20 text-green-400 border-green-500/20' : 'bg-yellow-500/20 text-yellow-400 border-yellow-500/20'}`}>
+                      {rep.status}
+                    </span>
+                  </td>
+                  <td className="p-4">
+                    {rep.action === 'Download' ? <button className="text-blue-400 hover:text-blue-300">Download</button> : <span className="text-gray-600">Pending</span>}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
-    </div>
-  );
+    );
+  };
 
   // ============================================
   // PROFILE VIEW
@@ -733,6 +729,7 @@ export default function Home() {
         </div>
       </aside>
 
+      {/* Main Content */}
       <main className="flex-1 overflow-y-auto p-6">
         {activePage === "dashboard" && renderDashboard()}
         {activePage === "chat" && (
