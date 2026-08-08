@@ -24,42 +24,6 @@ type Message = {
   suggestions?: string[];
 };
 
-// Static fallback data for charts (if API fails, or for chat responses)
-const DASHBOARD_DATA = {
-  kpis: {
-    total_sales: 750000,
-    total_profit: 145000,
-    total_orders: 2700,
-    avg_profit_margin: 19.3,
-    unique_customers: 850,
-  },
-  sales_by_category: [
-    { category: "Furniture", sales: 250000, profit: 35000 },
-    { category: "Office Supplies", sales: 180000, profit: 42000 },
-    { category: "Technology", sales: 320000, profit: 68000 },
-  ],
-  sales_by_region: [
-    { region: "West", sales: 280000, profit: 52000 },
-    { region: "East", sales: 240000, profit: 41000 },
-    { region: "South", sales: 130000, profit: 22000 },
-    { region: "Central", sales: 100000, profit: 30000 },
-  ],
-  sales_trend: [
-    { month: "Jan", sales: 45000 },
-    { month: "Feb", sales: 52000 },
-    { month: "Mar", sales: 48000 },
-    { month: "Apr", sales: 61000 },
-    { month: "May", sales: 58000 },
-    { month: "Jun", sales: 67000 },
-    { month: "Jul", sales: 72000 },
-    { month: "Aug", sales: 69000 },
-    { month: "Sep", sales: 81000 },
-    { month: "Oct", sales: 78000 },
-    { month: "Nov", sales: 85000 },
-    { month: "Dec", sales: 94000 },
-  ],
-};
-
 export default function Home() {
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -73,6 +37,16 @@ export default function Home() {
   const [activePage, setActivePage] = useState<"dashboard" | "chat" | "reports" | "profile" | "settings">("dashboard");
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
+  // ============================================
+  // DASHBOARD + REPORTS STATE (lifted up here so
+  // hooks are always called in the same order,
+  // regardless of which tab is active)
+  // ============================================
+  const [dashboardLoading, setDashboardLoading] = useState(true);
+  const [dashboardData, setDashboardData] = useState<any>(null);
+  const [reportsLoading, setReportsLoading] = useState(true);
+  const [reportsData, setReportsData] = useState<any[]>([]);
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
@@ -80,6 +54,20 @@ export default function Home() {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  useEffect(() => {
+    fetch('/api/dashboard')
+      .then(res => res.json())
+      .then(json => { setDashboardData(json); setDashboardLoading(false); })
+      .catch(() => setDashboardLoading(false));
+  }, []);
+
+  useEffect(() => {
+    fetch('/api/reports')
+      .then(res => res.json())
+      .then(json => { setReportsData(json); setReportsLoading(false); })
+      .catch(() => setReportsLoading(false));
+  }, []);
 
   const downloadCSV = (data: any[]) => {
     if (!data || data.length === 0) return;
@@ -317,17 +305,7 @@ export default function Home() {
   // ============================================
 
   const renderDashboard = () => {
-    const [loading, setLoading] = useState(true);
-    const [data, setData] = useState<any>(null);
-
-    useEffect(() => {
-      fetch('/api/dashboard')
-        .then(res => res.json())
-        .then(json => { setData(json); setLoading(false); })
-        .catch(() => setLoading(false));
-    }, []);
-
-    if (loading) {
+    if (dashboardLoading) {
       return (
         <div className="flex items-center justify-center h-64">
           <div className="flex flex-col items-center gap-2 text-gray-400">
@@ -342,7 +320,7 @@ export default function Home() {
       );
     }
 
-    if (!data) return <div className="text-red-400 p-4">Failed to load dashboard data.</div>;
+    if (!dashboardData) return <div className="text-red-400 p-4">Failed to load dashboard data.</div>;
 
     return (
       <div className="space-y-6">
@@ -353,19 +331,19 @@ export default function Home() {
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
             <div className="text-xs text-gray-400 uppercase tracking-wide">Total Sales</div>
-            <div className="text-2xl font-bold text-white">${data.kpis.total_sales.toLocaleString('en-US')}</div>
+            <div className="text-2xl font-bold text-white">${dashboardData.kpis.total_sales.toLocaleString('en-US')}</div>
           </div>
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
             <div className="text-xs text-gray-400 uppercase tracking-wide">Total Profit</div>
-            <div className="text-2xl font-bold text-white">${data.kpis.total_profit.toLocaleString('en-US')}</div>
+            <div className="text-2xl font-bold text-white">${dashboardData.kpis.total_profit.toLocaleString('en-US')}</div>
           </div>
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
             <div className="text-xs text-gray-400 uppercase tracking-wide">Total Orders</div>
-            <div className="text-2xl font-bold text-white">{data.kpis.total_orders.toLocaleString('en-US')}</div>
+            <div className="text-2xl font-bold text-white">{dashboardData.kpis.total_orders.toLocaleString('en-US')}</div>
           </div>
           <div className="bg-white/10 backdrop-blur-sm border border-white/20 rounded-lg p-4">
             <div className="text-xs text-gray-400 uppercase tracking-wide">Profit Margin</div>
-            <div className="text-2xl font-bold text-white">{data.kpis.avg_profit_margin}%</div>
+            <div className="text-2xl font-bold text-white">{dashboardData.kpis.avg_profit_margin}%</div>
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
@@ -373,7 +351,7 @@ export default function Home() {
             <h3 className="text-sm font-medium text-gray-300 mb-2">Sales by Category</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data.sales_by_category}>
+                <BarChart data={dashboardData.sales_by_category}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
                   <XAxis dataKey="category" stroke="#94a3b8" fontSize={12} />
                   <YAxis stroke="#94a3b8" fontSize={12} />
@@ -387,7 +365,7 @@ export default function Home() {
             <h3 className="text-sm font-medium text-gray-300 mb-2">Sales by Region</h3>
             <div className="h-64">
               <ResponsiveContainer width="100%" height="100%">
-                <BarChart data={data.sales_by_region}>
+                <BarChart data={dashboardData.sales_by_region}>
                   <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
                   <XAxis dataKey="region" stroke="#94a3b8" fontSize={12} />
                   <YAxis stroke="#94a3b8" fontSize={12} />
@@ -402,7 +380,7 @@ export default function Home() {
           <h3 className="text-sm font-medium text-gray-300 mb-2">Sales Trend (Monthly)</h3>
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data.sales_trend}>
+              <LineChart data={dashboardData.sales_trend}>
                 <CartesianGrid strokeDasharray="3 3" stroke="#ffffff20" />
                 <XAxis dataKey="month" stroke="#94a3b8" fontSize={12} />
                 <YAxis stroke="#94a3b8" fontSize={12} />
@@ -530,8 +508,8 @@ export default function Home() {
             onClick={handleSend}
             disabled={isLoading || !input.trim()}
             className={`px-6 py-3 rounded-xl font-medium transition ${isLoading || !input.trim()
-                ? "bg-gray-600/50 text-gray-400 cursor-not-allowed"
-                : "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:opacity-90"
+              ? "bg-gray-600/50 text-gray-400 cursor-not-allowed"
+              : "bg-gradient-to-r from-blue-600 to-purple-600 text-white hover:opacity-90"
               }`}
           >
             {isLoading ? "..." : "Send"}
@@ -546,17 +524,7 @@ export default function Home() {
   // ============================================
 
   const renderReports = () => {
-    const [loading, setLoading] = useState(true);
-    const [reports, setReports] = useState<any[]>([]);
-
-    useEffect(() => {
-      fetch('/api/reports')
-        .then(res => res.json())
-        .then(json => { setReports(json); setLoading(false); })
-        .catch(() => setLoading(false));
-    }, []);
-
-    if (loading) return <div className="text-gray-400 p-6">Loading reports...</div>;
+    if (reportsLoading) return <div className="text-gray-400 p-6">Loading reports...</div>;
 
     return (
       <div className="flex flex-col w-full max-w-4xl text-white">
@@ -575,7 +543,7 @@ export default function Home() {
               <tr><th className="p-4 text-sm font-medium text-gray-400">Report Name</th><th className="p-4 text-sm font-medium text-gray-400">Type</th><th className="p-4 text-sm font-medium text-gray-400">Date Generated</th><th className="p-4 text-sm font-medium text-gray-400">Status</th><th className="p-4 text-sm font-medium text-gray-400">Action</th></tr>
             </thead>
             <tbody>
-              {reports.map((rep) => (
+              {reportsData.map((rep) => (
                 <tr key={rep.id} className="border-b border-white/5 hover:bg-white/5 transition-colors">
                   <td className="p-4 font-medium">{rep.name}</td>
                   <td className="p-4 text-gray-400">{rep.type}</td>
