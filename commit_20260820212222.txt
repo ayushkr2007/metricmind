@@ -1,2 +1,0 @@
-Commit by Ayush Gautam on 2026-07-22
-Ayush: core development and feature implementation (2026-07-22)
