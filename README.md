@@ -1,0 +1,39 @@
+# 🧠 MetricMind - AI-Powered Business Intelligence
+
+**MetricMind** is a fully semantic AI BI engine that transforms natural language questions into real-time data visualizations. It analyzes sales and pricing data across 24 countries, supports local currencies, and provides multi-step reasoning for deep business insights.
+
+> **Live Demo**: [https://metricmind-ui.vercel.app](https://metricmind-ui.vercel.app)
+
+---
+
+## 🚀 Tech Stack
+- **Frontend**: Next.js (React), Tailwind CSS, Recharts
+- **Backend/API**: Next.js API Routes, Custom LLM Agent logic
+- **Infrastructure**: Vercel (Hosting & CI/CD), GitHub
+- **Data Handling**: JSON-based transactional datasets with semantic governance
+
+---
+
+## ✨ Key Features
+- **Natural Language Querying**: Ask questions like *"Show me sales by region"* or *"What is our profit margin?"*.
+- **Interactive Dashboards**: Real-time charts (Bar, Line, Area) and KPI cards.
+- **Multi-Step Reasoning**: The AI breaks down complex queries into logical steps, showing you its thought process.
+- **Transparency Layer**: Every query exposes the underlying API call structure (measures, dimensions, filters).
+- **Semantic Governance**: All metrics (revenue, profit, costs) are defined in a semantic layer, eliminating hardcoded values.
+
+---
+
+## 🧩 Project Architecture & Pipeline
+1. **User Input** -> User types a question into the Chat interface.
+2. **API Call** -> The frontend sends the query to `/api/chat`.
+3. **AI Processing** -> The backend engine parses the intent, identifies required data dimensions, and retrieves the relevant dataset.
+4. **Reasoning & Analytics** -> The agent computes the necessary metrics (totals, margins, regional sums).
+5. **Visualization** -> Data is formatted and sent back to the frontend, which uses Recharts to render tables, single-value KPIs, and Bar/Line charts.
+
+---
+
+## 🛠️ How to Run Locally
+1. **Clone the repository**:
+   ```bash
+   git clone https://github.com/ayushkr2007/metricmind.git
+   cd metricmind

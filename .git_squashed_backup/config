@@ -1,0 +1,16 @@
+[core]
+	repositoryformatversion = 0
+	filemode = false
+	bare = false
+	logallrefupdates = true
+	symlinks = false
+	ignorecase = true
+[user]
+	name = ayushkr2007
+	email = akg109283@gmail.com
+[remote "origin"]
+	url = https://github.com/ayushkr2007/metricmind
+	fetch = +refs/heads/*:refs/remotes/origin/*
+[branch "main"]
+	remote = origin
+	merge = refs/heads/main
